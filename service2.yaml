@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: echo
+  labels:
+    app: echo
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: echo
+  template:
+    metadata:
+      labels:
+        app: echo
+    spec:
+      containers:
+      - name: echo
+        image: eu.gcr.io/datadog-sandbox/echo:0.2
+        env:
+          - name: VERSION
+            value: v3
+        ports:
+        - containerPort: 5000
+---
+
+kind: Service
+apiVersion: v1
+metadata:
+  name: echo2
+  labels:
+    app: echo
+  annotations:
+    cloud.google.com/load-balancer-type: "Internal"
+spec:
+  type: LoadBalancer
+  externalTrafficPolicy: Local
+  selector:
+    app: echo
+  ports:
+  - protocol: TCP
+    port: 1080
+    targetPort: 5000

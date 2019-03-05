@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: echo
+  labels:
+    app: echo
+    #  annotations:
+    #service.beta.kubernetes.io/aws-load-balancer-internal: "true"
+    #service.beta.kubernetes.io/aws-load-balancer-extra-security-groups: "sg-74b2fe02"
+spec:
+  selector:
+    app: echo
+  clusterIP: 10.129.200.8
+  ports:
+  - name: http
+    protocol: TCP
+    port: 80
+    targetPort: 5000
